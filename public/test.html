@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>API Test</title>
+</head>
+<body>
+    <h1>API Test Page</h1>
+    <button onclick="testLogin()">Test Login</button>
+    <button onclick="testShowTasks()">Test Show Tasks</button>
+    <button onclick="testAddTask()">Test Add Task</button>
+    <div id="results"></div>
+
+    <script>
+        async function testLogin() {
+            try {
+                const response = await fetch('/user/login', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    credentials: 'include',
+                    body: JSON.stringify({ email: 'test@test.com', password: 'test123' })
+                });
+                const result = await response.text();
+                document.getElementById('results').innerHTML = `Login: ${result}`;
+            } catch (error) {
+                document.getElementById('results').innerHTML = `Login Error: ${error}`;
+            }
+        }
+
+        async function testShowTasks() {
+            try {
+                const response = await fetch('/task/showtask', {
+                    credentials: 'include'
+                });
+                const result = await response.text();
+                document.getElementById('results').innerHTML = `Show Tasks: ${result}`;
+            } catch (error) {
+                document.getElementById('results').innerHTML = `Show Tasks Error: ${error}`;
+            }
+        }
+
+        async function testAddTask() {
+            try {
+                const response = await fetch('/task/addtask', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    credentials: 'include',
+                    body: JSON.stringify({ name: 'Test Expense', category: 'Food', amount: 10.50 })
+                });
+                const result = await response.text();
+                document.getElementById('results').innerHTML = `Add Task: ${result}`;
+            } catch (error) {
+                document.getElementById('results').innerHTML = `Add Task Error: ${error}`;
+            }
+        }
+    </script>
+</body>
+</html>
