@@ -68,10 +68,20 @@
                     <p class="no-expenses">No expenses found. Add your first expense above!</p>
                 </div>
             </div>
+
+            <!-- Expense Chart -->
+            <div class="card">
+                <h2>📈 Expenses Over Time</h2>
+                <div class="chart-container">
+                    <canvas id="expenseChart" width="400" height="200"></canvas>
+                </div>
+            </div>
         </div>
 
         <div id="message" class="message"></div>
     </div>
+    <!-- Load Chart.js library -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="js/dashboard.js"></script>
 </body>
 </html>

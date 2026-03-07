@@ -6,9 +6,8 @@ const sendcookie = (res, user, message, statuscode=200) => {
     res.status(statuscode).cookie("token", token, {
         httpOnly: true,
         maxAge: 24 * 60 * 60 * 1000, 
-        secure: false, // Set to false for development (localhost)
-        sameSite: "lax", // Changed from "none" to "lax" for localhost
-
-    }).send(message);
+        secure: false, 
+        sameSite: "lax", 
+   }).send(message);
 }
 module.exports = sendcookie;

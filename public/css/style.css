@@ -213,6 +213,14 @@ body {
     border-radius: 8px;
 }
 
+/* Chart Container */
+.chart-container {
+    position: relative;
+    width: 100%;
+    max-width: 700px;
+    margin: 0 auto;
+}
+
 .expense-item {
     display: grid;
     grid-template-columns: 2fr 1fr 1fr 1fr auto auto;

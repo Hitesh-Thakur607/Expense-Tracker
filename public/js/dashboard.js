@@ -192,6 +192,8 @@ document.addEventListener('DOMContentLoaded', function() {
 
         totalExpensesElement.textContent = `$${totalAmount.toFixed(2)}`;
         expenseCountElement.textContent = expenseCount;
+        // update chart after summary
+        renderChart();
     }
 
     // Logout function
@@ -318,4 +320,64 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Auto-refresh expenses every 30 seconds
     setInterval(loadExpenses, 30000);
+
+    // Chart rendering
+    function renderChart() {
+        const ctx = document.getElementById('expenseChart');
+        if (!ctx) return;
+        const context = ctx.getContext('2d');
+
+        // group by date
+        const grouped = {};
+        expenses.forEach(e => {
+            const d = new Date(e.date);
+            if (isNaN(d)) return;
+            const key = d.toLocaleDateString();
+            grouped[key] = (grouped[key] || 0) + parseFloat(e.amount || 0);
+        });
+
+        const labels = Object.keys(grouped).sort((a, b) => new Date(a) - new Date(b));
+        const dataPoints = labels.map(l => grouped[l]);
+
+        // if there's no data, destroy existing chart and exit
+        if (labels.length === 0) {
+            if (window.expenseChartInstance) {
+                window.expenseChartInstance.destroy();
+                window.expenseChartInstance = null;
+            }
+            return;
+        }
+
+        if (window.expenseChartInstance) {
+            window.expenseChartInstance.data.labels = labels;
+            window.expenseChartInstance.data.datasets[0].data = dataPoints;
+            window.expenseChartInstance.update();
+        } else {
+            window.expenseChartInstance = new Chart(context, {
+                type: 'bar',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'Expenses ($)',
+                        data: dataPoints,
+                        backgroundColor: 'rgba(102, 126, 234, 0.6)',
+                        borderColor: 'rgba(102, 126, 234, 1)',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            display: false
+                        }
+                    }
+                }
+            });
+        }
+    }
 });
